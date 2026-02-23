@@ -3,6 +3,7 @@
 #include <raylib.h>
 #include <string>
 #include "stack.hpp"
+#include <vector>
 
 // using namespace std;  we dont have to use this as stack.hpp already uses them
 
@@ -18,6 +19,27 @@ int first_x=tower_gap;
 int second_x=2*tower_gap+100;
 int third_x=3*tower_gap+200;
 
+int no_disk;
+
+
+//we are storing moves in "move" sturcture so that we can show it later on the screen
+struct move  
+{
+    int from;
+    int to;
+};
+
+vector<move> moves; // we are creating a vector of objects from structure move
+
+void hanoi(int n, int from , int to , int aux) //this recurtion will run and solve hanoi completely storing moves in moves vector
+{
+    if(n==0)
+        return;
+    hanoil(n-1, from, aux ,to );
+    moves.push_back({from,to});
+    hanoi(n-1,aux,to, from);
+    
+}
 
 
 void drawDisks(stack temp, int tower_x)
@@ -36,7 +58,14 @@ void drawDisks(stack temp, int tower_x)
         for(int i = count-1; i >= 0; i--)
         {
             int label = disk_label[i];
-            int disk_radius = label * 30;
+
+            int scale;
+            if (no_disk>=6)
+                scale=20;
+            else
+                scale=30;
+                
+            int disk_radius = label * scale;
             // position based on slot index, not label value
             float y = 620 - (count - 1 - i) * 30;  
             Rectangle disk = {(float)(tower_x - disk_radius + tower_width/2),y, (float)(2*disk_radius), 30.0f};
@@ -48,19 +77,23 @@ void drawDisks(stack temp, int tower_x)
 
 int main() // codes inside main
 {
-    int no_disk;
+    
     cout<<"Give numbers of disk on origin tower:";
     cin>>no_disk;
+
+    hanoi(no_disk,0,2,1); //original =0 , destination = 2, auxillary =1
 
     // int max_radius=150;
     // int min_radius=30;
 
     // float diff_rad=(max_radius-min_radius)/no_disk-1;
 
-    stack first(no_disk); // will automatically assign lables
+    stack tower[3];  //initialize three towers
 
-    stack second;
-    stack third;
+    // 0 = first , 1 = second and 2 = third
+    tower[0]=stack(no_disk); // use constructor function to initialize tower 0 with required no of disk
+    tower[1]=stack(); // 0 no of disk
+    tower[2]=stack();
 
 
     InitWindow(width, height, "Tower of Hanoi");
@@ -82,9 +115,9 @@ int main() // codes inside main
         DrawRectangle(third_x,tower_y,tower_width,tower_height,BLACK); //destination tower
 
         //drawing for first tower
-        drawDisks(first,first_x);
-        drawDisks(second,second_x);
-        drawDisks(third,third_x);
+        drawDisks(tower[0],first_x);
+        drawDisks(tower[1],second_x);
+        drawDisks(tower[2],third_x);
         
         EndDrawing(); //after enddraing is executed then only all graphics is drawn 
         
