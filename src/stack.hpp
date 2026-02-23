@@ -26,7 +26,11 @@ class stack
 
         bool isEmpty()
         {
-            return (top==-1);
+            if(top==-1)
+            {
+                   return true;
+            }
+            return false;
         }
 
         bool isFull()

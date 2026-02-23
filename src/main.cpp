@@ -23,19 +23,19 @@ int no_disk;
 
 
 //we are storing moves in "move" sturcture so that we can show it later on the screen
-struct move  
+struct Move   // dont use small move it is an default argument
 {
     int from;
     int to;
 };
 
-vector<move> moves; // we are creating a vector of objects from structure move
+vector<Move> moves; // we are creating a vector of objects from structure move
 
 void hanoi(int n, int from , int to , int aux) //this recurtion will run and solve hanoi completely storing moves in moves vector
 {
     if(n==0)
         return;
-    hanoil(n-1, from, aux ,to );
+    hanoi(n-1, from, aux ,to );
     moves.push_back({from,to});
     hanoi(n-1,aux,to, from);
     
@@ -44,9 +44,7 @@ void hanoi(int n, int from , int to , int aux) //this recurtion will run and sol
 
 void drawDisks(stack temp, int tower_x)
 {
-    
-    while(!temp.isEmpty())
-    {  
+      
         int disk_label[MAX];
         int count = 0;
         while(!temp.isEmpty())
@@ -72,7 +70,6 @@ void drawDisks(stack temp, int tower_x)
             DrawRectangleRounded(disk, 0.5f, 12, BLUE);
             DrawText(to_string(label).c_str(), tower_x - disk_radius + tower_width/2,y, 20, BLACK);
         }
-    }
 }
 
 int main() // codes inside main
@@ -94,6 +91,10 @@ int main() // codes inside main
     tower[0]=stack(no_disk); // use constructor function to initialize tower 0 with required no of disk
     tower[1]=stack(); // 0 no of disk
     tower[2]=stack();
+
+    int move_counter=0;
+    int frame_counter=0;
+    int frame_per_moves=60;
 
 
     InitWindow(width, height, "Tower of Hanoi");
@@ -118,7 +119,22 @@ int main() // codes inside main
         drawDisks(tower[0],first_x);
         drawDisks(tower[1],second_x);
         drawDisks(tower[2],third_x);
-        
+
+        //drwing moves
+
+        frame_counter++; //frame count increased in each iteration
+
+        if(frame_counter>frame_per_moves && move_counter<(int)moves.size()) // move counter is one digit smaller then moves.size
+        {
+            Move m= moves[move_counter++]; //creating an Move structure object which will be assigned to a step from moves object
+            int disk_number=tower[m.from].pop(); //obj.function();
+            tower[m.to].push(disk_number);
+            frame_counter=0;
+        }
+
+        //drawing no of moves
+         DrawText(("Move: " + to_string(move_counter) + "/" + to_string(moves.size())).c_str(), 10, 10, 20, BLACK);
+
         EndDrawing(); //after enddraing is executed then only all graphics is drawn 
         
     }
