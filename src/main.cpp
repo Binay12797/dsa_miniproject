@@ -113,10 +113,10 @@ int main() // codes inside main
         ClearBackground(GREEN); // will clear everything drawin in previous loop
         //drawing part
 
-        
+        DrawRectangle(100+2,650+2,platform_length,40,GRAY);//shadow
         DrawRectangle(100,650,platform_length,40,BLACK); //rectangle for base
 
-        
+        //actual
         DrawRectangle(first_x,tower_y,tower_width,tower_height,BLACK); //origin tower
         DrawRectangle(second_x,tower_y,tower_width,tower_height,BLACK); //mid tower
         DrawRectangle(third_x,tower_y,tower_width,tower_height,BLACK); //destination tower
