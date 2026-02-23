@@ -65,10 +65,17 @@ void drawDisks(stack temp, int tower_x)
                 
             int disk_radius = label * scale;
             // position based on slot index, not label value
-            float y = 620 - (count - 1 - i) * 30;  
-            Rectangle disk = {(float)(tower_x - disk_radius + tower_width/2),y, (float)(2*disk_radius), 30.0f};
-            DrawRectangleRounded(disk, 0.5f, 12, BLUE);
-            DrawText(to_string(label).c_str(), tower_x - disk_radius + tower_width/2,y, 20, BLACK);
+            float y = 620 - (count - 1 - i) * 35;  
+            Rectangle disk = {(float)(tower_x - disk_radius + tower_width/2),y, (float)(2*disk_radius), 40.0f};
+
+            //shadow of rectangle
+            Rectangle shadow = {disk.x + 3, disk.y + 3, disk.width, disk.height};
+            DrawRectangleRounded(shadow, 1, 30, DARKGRAY);
+
+            //actual rectangle
+            DrawRectangleRounded(disk, 1, 30, BLUE);
+            DrawRectangleRoundedLines(disk,0.99f,25,BLACK);
+            DrawText(to_string(label).c_str(),tower_x+5,y+10, 20, BLACK);
         }
 }
 
@@ -93,8 +100,7 @@ int main() // codes inside main
     tower[2]=stack();
 
     int move_counter=0;
-    int frame_counter=0;
-    int frame_per_moves=60;
+
 
 
     InitWindow(width, height, "Tower of Hanoi");
@@ -122,21 +128,25 @@ int main() // codes inside main
 
         //drwing moves
 
-        frame_counter++; //frame count increased in each iteration
 
-        if(frame_counter>frame_per_moves && move_counter<(int)moves.size()) // move counter is one digit smaller then moves.size
+        if(IsKeyPressed(KEY_ENTER) && move_counter<(int)moves.size()) // move counter is one digit smaller then moves.size
         {
             Move m= moves[move_counter++]; //creating an Move structure object which will be assigned to a step from moves object
             int disk_number=tower[m.from].pop(); //obj.function();
             tower[m.to].push(disk_number);
-            frame_counter=0;
         }
 
         //drawing no of moves
-         DrawText(("Move: " + to_string(move_counter) + "/" + to_string(moves.size())).c_str(), 10, 10, 20, BLACK);
+        DrawText(("Move: " + to_string(move_counter) + "/" + to_string(moves.size())).c_str(), 10, 10, 50, BLACK);
+        DrawText(("Move: " + to_string(move_counter) + "/" + to_string(moves.size())).c_str(), 5, 5, 50, YELLOW);
 
         EndDrawing(); //after enddraing is executed then only all graphics is drawn 
-        
+
+
+        //drawing instructions
+        DrawText("Press Enter to view the next move",280-2, 715-2, 40 , GRAY );
+        DrawText("Press Enter to view the next move",280, 715, 40 , BLACK );
+       
     }
     CloseWindow();
 }
