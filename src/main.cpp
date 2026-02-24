@@ -136,6 +136,17 @@ int main() // codes inside main
             tower[m.to].push(disk_number);
         }
 
+        //to go to previous steps
+        if(IsKeyPressed(KEY_BACKSPACE))
+        {
+            if(move_counter!=0)
+            {
+                Move m=moves[--move_counter];
+                int disk_number=tower[m.to].pop();
+              tower[m.from].push(disk_number);
+            }
+        }
+
         //drawing no of moves
         DrawText(("Move: " + to_string(move_counter) + "/" + to_string(moves.size())).c_str(), 10, 10, 50, BLACK);
         DrawText(("Move: " + to_string(move_counter) + "/" + to_string(moves.size())).c_str(), 5, 5, 50, YELLOW);
@@ -144,8 +155,8 @@ int main() // codes inside main
 
 
         //drawing instructions
-        DrawText("Press Enter to view the next move",280-2, 715-2, 40 , GRAY );
-        DrawText("Press Enter to view the next move",280, 715, 40 , BLACK );
+        DrawText("Press Enter to view the next move and Backspace for previous move",108-2, 715-2, 30 , GRAY );
+        DrawText("Press Enter to view the next move and Backspace for previous move",108, 715, 30 , BLACK );
        
     }
     CloseWindow();

@@ -25,8 +25,7 @@ class stack
         }
 
         bool isEmpty()
-        {
-            if(top==-1)
+        {            if(top==-1)
             {
                    return true;
             }
